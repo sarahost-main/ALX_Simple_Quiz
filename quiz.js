@@ -1,46 +1,28 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Sélection du formulaire et de la division de feedback
-    const form = document.getElementById("registration-form");
-    const feedbackDiv = document.getElementById("form-feedback");
+// Fonction pour vérifier la réponse
+function checkAnswer() {
+    // Définir la réponse correcte
+    const correctAnswer = "4";
 
-    form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Empêche l'envoi du formulaire
+    // Récupérer la réponse sélectionnée par l'utilisateur
+    const selectedOption = document.querySelector('input[name="quiz"]:checked');
 
-        // Récupération et nettoyage des valeurs
-        const username = document.getElementById("username").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
+    // Vérifier si l'utilisateur a sélectionné une option
+    if (!selectedOption) {
+        document.getElementById("feedback").textContent = "Please select an answer!";
+        return;
+    }
 
-        // Variables de validation
-        let isValid = true;
-        const messages = [];
+    const userAnswer = selectedOption.value;
 
-        // Validation du nom d'utilisateur
-        if (username.length < 3) {
-            isValid = false;
-            messages.push("Le nom d'utilisateur doit contenir au moins 3 caractères.");
-        }
+    // Comparer avec la réponse correcte
+    if (userAnswer === correctAnswer) {
+        document.getElementById("feedback").textContent = "Correct! Well done.";
+        document.getElementById("feedback").style.color = "green";
+    } else {
+        document.getElementById("feedback").textContent = "That's incorrect. Try again!";
+        document.getElementById("feedback").style.color = "red";
+    }
+}
 
-        // Validation de l'email
-        if (!email.includes("@") || !email.includes(".")) {
-            isValid = false;
-            messages.push("Veuillez entrer un email valide.");
-        }
-
-        // Validation du mot de passe
-        if (password.length < 8) {
-            isValid = false;
-            messages.push("Le mot de passe doit contenir au moins 8 caractères.");
-        }
-
-        // Affichage du feedback
-        feedbackDiv.style.display = "block";
-        if (isValid) {
-            feedbackDiv.textContent = "Registration successful!";
-            feedbackDiv.style.color = "#28a745"; // vert
-        } else {
-            feedbackDiv.innerHTML = messages.join("<br>");
-            feedbackDiv.style.color = "#dc3545"; // rouge
-        }
-    });
-});
+// Ajouter l'écouteur d'événement au bouton
+document.getElementById("submit-answer").addEventListener("click", checkAnswer);
